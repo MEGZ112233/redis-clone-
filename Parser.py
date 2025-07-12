@@ -10,7 +10,8 @@ async def parseInt(reader):
 
 async def parseBulkString(reader):
     length = await parseInt(reader)
-    ret = await reader.read(length).decode()
+    ret = await reader.read(length)
+    ret = ret.decode()
     await reader.read(2)
     return ret
 
@@ -24,9 +25,10 @@ async def parseArray(reader):
 
 
 async def parse(reader):
-    choice = await reader.read(1).decode()
+    choice = await reader.read(1)
+    choice = choice.decode()
     if not choice :
-        raise Exception("the connection is closed")
+        return None
     if choice == '*':
         return await parseArray(reader)
     elif choice == ':':
@@ -36,4 +38,4 @@ async def parse(reader):
     else :
         raise Exception(f"invalid choice: {choice}")
 
-## *2\r\n$4\r\nECHO\r\n$3\r\nhey\r\n
+## "*2\r\n$4\r\nECHO\r\n$3\r\nhey\r\n"
