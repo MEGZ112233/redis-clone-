@@ -1,8 +1,14 @@
-import socket  # noqa: F401
+import socket
 
 import asyncio
-import Parser
-import commandHandler
+from . import Parser
+from . import commandHandler
+from .expire import active_deleting
+from app import expires, hash_table
+
+# import Parser , commandHandler
+
+
 HOST = "localhost"
 PORT = 6379
 BUFFER_SIZE = 1024
@@ -25,7 +31,12 @@ async def handle_client(reader, writer):
 
 
 async def main():
-    server = await asyncio.start_server(handle_client, HOST, PORT)
+    asyncio.create_task(active_deleting(expires, hash_table, 20, 25))
+    server = await asyncio.start_server(
+        lambda r, w: handle_client(r, w),
+        "127.0.0.1",
+        6379
+    )
     async with server:
         await server.serve_forever()
 
