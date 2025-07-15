@@ -40,3 +40,4 @@ async def test_active_deleting():
 
 if __name__ == "__main__":
     asyncio.run(test_active_deleting())
+    print("hello MEGZ112233")

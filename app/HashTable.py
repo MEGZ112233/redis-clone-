@@ -51,3 +51,4 @@ class HashTable:
                 if len(items) == k:
                     break
         return items
+
