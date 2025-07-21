@@ -21,3 +21,15 @@ async def active_deleting(expire_table: HashTable, hash_table: HashTable, k: int
             break
 
     await asyncio.sleep(.2)
+
+
+async def is_valid(expire_table: HashTable, hash_table: HashTable, key):
+    expires_value = expire_table.get(key)
+    key_value = hash_table.get(key)
+    if expires_value is not None and expires_value < time.time() * 1000:
+        expire_table.delete(key)
+        hash_table.delete(key)
+        return False
+    if key_value is None:
+        return False
+    return True

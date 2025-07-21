@@ -5,10 +5,18 @@ import random
 class HashTable:
     def __init__(self, size):
         self.size = size
-        self.buckets =  [[] for _ in range(size)]
+        self.buckets = [[] for _ in range(size)]
+
+    def get_size(self):
+        return self.size
+
+    def clear_resize(self, size: int):
+        self.size = size
+        self.buckets = [[] for _ in range(size)]
 
     def set(self, key, value):
         index = get_hash(key) % self.size
+        print(f"i have got there with key : {key}  and a value of {value}")
         bucket = self.buckets[index]
         for pair in bucket:
             if pair[0] == key:
@@ -16,6 +24,13 @@ class HashTable:
                 return True
         bucket.append([key, value])
         return True
+
+    def get_keys(self):
+        keys = []
+        for bucket in self.buckets:
+            for pair in bucket:
+                keys.append(pair[0])
+        return keys
 
     def get(self, key):
         index = get_hash(key) % self.size
@@ -51,4 +66,3 @@ class HashTable:
                 if len(items) == k:
                     break
         return items
-
