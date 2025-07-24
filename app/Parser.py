@@ -1,5 +1,6 @@
 async def parseInt(reader):
     ret = 0
+
     while True:
         c = await reader.read(1)
         if c == b'\r':
@@ -15,14 +16,12 @@ async def parseBulkString(reader):
     await reader.read(2)
     return ret
 
-
 async def parseArray(reader):
     ret = []
     length = await parseInt(reader)
     for i in range(length):
         ret.append(await parse(reader))
     return ret
-
 
 async def parse(reader):
     choice = await reader.read(1)
@@ -38,4 +37,3 @@ async def parse(reader):
     else :
         raise Exception(f"invalid choice: {choice}")
 
-## "*2\r\n$4\r\nECHO\r\n$3\r\nhey\r\n"
